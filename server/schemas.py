@@ -29,8 +29,8 @@ class ChaosConfig(BaseModel):
     """Request body for POST /chaos/enable."""
     mode: ChaosMode = ChaosMode.LATENCY
     error_rate: float = Field(0.5, ge=0.0, le=1.0, description="Fraction of requests that fail (errors mode)")
-    latency_min: float = Field(2.0, ge=0.0, description="Min injected delay in seconds")
-    latency_max: float = Field(5.0, ge=0.0, description="Max injected delay in seconds")
+    latency_min: float = Field(2000.0, ge=0.0, description="Min injected delay in milliseconds")
+    latency_max: float = Field(5000.0, ge=0.0, description="Max injected delay in milliseconds")
 
 
 class HealthResponse(BaseModel):
@@ -38,14 +38,22 @@ class HealthResponse(BaseModel):
     status: str = "ok"
     endpoint: str
     latency_ms: float
+    error_rate: float = 0.0
     timestamp: datetime = Field(default_factory=datetime.utcnow)
 
 
 class CheckoutResponse(BaseModel):
-    """Response from /checkout endpoint. In degraded mode, optional fields go None."""
+    """Response from /checkout endpoint. In degraded mode, optional fields go None.
+
+    Includes ``endpoint``, ``latency_ms`` and ``error_rate`` so the
+    frontend can treat it like a HealthResponse for live-status views.
+    """
     order_id: str | None = None
     total: float | None = None
     status: str = "confirmed"
+    endpoint: str = "/checkout"
+    latency_ms: float = 0.0
+    error_rate: float = 0.0
     timestamp: datetime = Field(default_factory=datetime.utcnow)
 
 

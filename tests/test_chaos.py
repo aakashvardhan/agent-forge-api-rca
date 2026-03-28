@@ -85,12 +85,12 @@ class TestMaybeInjectLatency:
 
     @pytest.mark.asyncio
     @patch("server.chaos.asyncio.sleep", new_callable=AsyncMock)
-    @patch("server.chaos.random.uniform", return_value=0.01)
+    @patch("server.chaos.random.uniform", return_value=100.0)
     async def test_injects_latency_when_active(self, _mock_uniform, mock_sleep):
-        set_config(ChaosConfig(mode=ChaosMode.LATENCY, latency_min=0.01, latency_max=0.02))
+        set_config(ChaosConfig(mode=ChaosMode.LATENCY, latency_min=100.0, latency_max=200.0))
         result = await maybe_inject_latency()
-        mock_sleep.assert_awaited_once_with(0.01)
-        assert result == pytest.approx(10.0)  # 0.01s * 1000 = 10ms
+        mock_sleep.assert_awaited_once_with(0.1)  # 100ms → 0.1s
+        assert result == pytest.approx(100.0)
 
     @pytest.mark.asyncio
     async def test_no_delay_in_errors_mode(self):

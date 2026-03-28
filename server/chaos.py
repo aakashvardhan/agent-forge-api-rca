@@ -32,9 +32,9 @@ async def maybe_inject_latency() -> float:
     cfg = _current_config
     if cfg.mode != ChaosMode.LATENCY:
         return 0.0
-    delay = random.uniform(cfg.latency_min, cfg.latency_max)
-    await asyncio.sleep(delay)
-    return delay * 1000  # convert to ms
+    delay_ms = random.uniform(cfg.latency_min, cfg.latency_max)
+    await asyncio.sleep(delay_ms / 1000.0)
+    return delay_ms
 
 
 def should_return_error() -> bool:

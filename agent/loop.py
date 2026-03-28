@@ -4,6 +4,7 @@ import logging
 from ingestion.poller import Poller
 from ingestion.webhook import WebhookReceiver
 from agent import detector, diagnoser, executor
+from memory import case_store, auto_tune
 from server.schemas import NormalizedEvent
 
 logger = logging.getLogger(__name__)
@@ -21,10 +22,13 @@ async def on_event(event: NormalizedEvent) -> None:
         event.endpoint, symptoms["z_score"], symptoms["error_rate_1m"], symptoms["is_degraded"],
     )
 
-    result = diagnoser.diagnose(symptoms)
+    case_context = case_store.get_similar(symptoms)
+    result = diagnoser.diagnose(symptoms, case_context)
     logger.info("Action: %s | %s", result["action"], result["diagnosis"])
 
     executor.execute(result)
+    case_store.save(symptoms, result)
+    auto_tune.update(result["action"])
 
 
 async def main() -> None:

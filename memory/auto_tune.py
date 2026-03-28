@@ -1,7 +1,7 @@
 import logging
 from collections import deque
 
-import agent.config as _config
+import agent.state as _state
 
 logger = logging.getLogger(__name__)
 
@@ -25,13 +25,13 @@ def update(action: str) -> None:
     wait_rate = sum(1 for a in _history if a == "WAIT") / len(_history)
     adjustment = (wait_rate - 0.5) * _MAX_STEP
 
-    old = _config.THRESHOLD_K
-    _config.THRESHOLD_K = round(
+    old = _state.THRESHOLD_K
+    _state.THRESHOLD_K = round(
         max(_MIN_THRESHOLD, min(_MAX_THRESHOLD, old + adjustment)), 3
     )
 
-    if _config.THRESHOLD_K != old:
+    if _state.THRESHOLD_K != old:
         logger.info(
             "THRESHOLD_K adjusted: %.3f -> %.3f (wait_rate=%.0f%% over last %d actions)",
-            old, _config.THRESHOLD_K, wait_rate * 100, len(_history),
+            old, _state.THRESHOLD_K, wait_rate * 100, len(_history),
         )

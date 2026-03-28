@@ -1,11 +1,15 @@
 import json
+import os
+from dotenv import load_dotenv
 from gradient import Gradient
-from agent.config import DIGITALOCEAN_ACCESS_TOKEN, GRADIENT_MODEL_ACCESS_KEY, MODEL_NAME
+
+load_dotenv()
 
 _client = Gradient(
-    access_token=DIGITALOCEAN_ACCESS_TOKEN,
-    inference_key=GRADIENT_MODEL_ACCESS_KEY,
+    access_token=os.getenv("DIGITALOCEAN_ACCESS_TOKEN", ""),
+    inference_key=os.getenv("GRADIENT_MODEL_ACCESS_KEY", ""),
 )
+MODEL_NAME = os.getenv("GRADIENT_MODEL", "llama3.3-70b-instruct")
 
 SYSTEM_PROMPT = """You are an API reliability expert. Given symptoms from a monitored API endpoint,
 diagnose the root cause and recommend one action.

@@ -2,7 +2,7 @@ import math
 from collections import defaultdict, deque
 from datetime import timedelta
 
-import agent.config as _config
+import agent.state as _state
 from server.schemas import NormalizedEvent
 
 WINDOW_SECONDS = 60
@@ -41,7 +41,7 @@ def check(event: NormalizedEvent) -> dict | None:
     window.append((event.timestamp, event.latency_ms))
 
     anomalous = (
-        z > _config.THRESHOLD_K
+        z > _state.THRESHOLD_K
         or event.error_rate_1m > 0.1
         or event.is_degraded
     )

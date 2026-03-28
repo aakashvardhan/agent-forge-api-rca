@@ -1,5 +1,5 @@
 from datetime import datetime, timezone
-import agent.config as _config
+import agent.state as _state
 
 _cases: list[dict] = []
 
@@ -24,7 +24,7 @@ def get_similar(symptoms: dict, k: int = 3) -> list:
 
         score = 0
         past = case["symptoms"]
-        if past.get("z_score", 0) > _config.THRESHOLD_K:
+        if past.get("z_score", 0) > _state.THRESHOLD_K:
             score += 1
         if past.get("error_rate_1m", 0) > 0.1:
             score += 1

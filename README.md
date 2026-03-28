@@ -95,6 +95,20 @@ curl -X POST http://localhost:8000/chaos/enable \
 curl -X POST http://localhost:8000/chaos/disable
 ```
 
+```
+Field	Description
+event_id	Unique hex UUID for correlating detection → diagnosis → action
+endpoint	The API path polled (/health or /checkout)
+timestamp	UTC ISO-8601 timestamp of the poll
+latency_ms	Round-trip response time in milliseconds
+status_code	HTTP status (200 on success, 500 on error, 0 on timeout/connection failure)
+error_rate_1m	Rolling error rate across recent polls (0.0 = all healthy, 1.0 = all failing)
+is_degraded	true when a 2xx response is missing required fields or has known-bad values
+error_detail	Error message from 4xx/5xx responses; null on success
+source	Always "poller" for this ingestion path (vs "nexla" or "health_check")
+schema_version	Schema version for forward compatibility
+```
+
 ## Demo Script
 
 1. **Baseline** (30s) — Dashboard shows green metrics, agent is monitoring quietly.

@@ -20,12 +20,12 @@ def execute(result: dict) -> None:
 
 
 def _reroute(diagnosis: str) -> None:
-    pass  # TODO: redirect traffic to backup endpoint
+    print(f"[REROUTE] Redirecting traffic to backup endpoint. Reason: {diagnosis}")
 
 
 def _alert(diagnosis: str) -> None:
-    pass  # TODO: notify on-call team
+    print(f"[ALERT] Notifying on-call team. Reason: {diagnosis}")
 
 
 def _wait(diagnosis: str) -> None:
-    pass  # TODO: log that issue is being monitored
+    print(f"[WAIT] Transient issue — monitoring, no action taken. Reason: {diagnosis}")

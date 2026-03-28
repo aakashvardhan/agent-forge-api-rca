@@ -36,8 +36,8 @@ class TestChaosConfig:
         cfg = ChaosConfig()
         assert cfg.mode == ChaosMode.LATENCY
         assert cfg.error_rate == 0.5
-        assert cfg.latency_min == 2.0
-        assert cfg.latency_max == 5.0
+        assert cfg.latency_min == 2000.0
+        assert cfg.latency_max == 5000.0
 
     def test_custom_values(self):
         cfg = ChaosConfig(
